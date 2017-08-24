@@ -6,11 +6,11 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:06:34 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/08/24 14:34:49 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/08/24 19:37:53 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "LexerParser.hpp"
+#include "AbstractVm.hpp"
 
 int main()
 {
@@ -20,7 +20,13 @@ int main()
 		std::cout << line << std::endl;
 		try
 		{
-			lexPars.Lexer(line);
+			lexPars.Parser(lexPars.Lexer(line));
+			Operand<int> test = Operand<int>("4", INT32);
+			Operand<int> test2 = Operand<int>("9", INT32);
+			std::cout << "value: " << test.toString() << ", type: " << TypeCompare[test.getType()] << std::endl;
+			std::cout << "value: " << test2.toString() << ", type: " << TypeCompare[test2.getType()] << std::endl;
+			test = test2;
+			std::cout << "value: " << test.toString() << ", type: " << TypeCompare[test.getType()] << std::endl;
 		}
 		catch(std::exception &e)
 		{

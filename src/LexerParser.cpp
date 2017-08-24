@@ -6,15 +6,11 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:19:15 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/08/24 14:54:14 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/08/24 19:29:40 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AbstractVm.hpp"
-#include "LexerParser.hpp"
-#include <string>
-#include <regex>
-#include <typeinfo>
 
 LexerParser::LexerParser(void) : _inst(0), _type(0), _value("")
 {
@@ -40,7 +36,7 @@ LexerParser		&LexerParser::operator=(LexerParser const &rhs)
 	return *this;
 }
 
-bool		LexerParser::Lexer(std::string line)
+std::string		LexerParser::Lexer(std::string line)
 {
 	std::regex pieces_regex(VALID_LINE);
 	std::cmatch pieces_match;
@@ -54,6 +50,11 @@ bool		LexerParser::Lexer(std::string line)
 		line = pieces_match.prefix();
 	if (line.length() == 0 || !std::regex_match(line.c_str(), pieces_match, pieces_regex))
 		throw InvalidLineException();
+	return line;
+}
+
+void		LexerParser::Parser(std::string line)
+{
 	for (int i = 0; i < 11; i++)
 	{
 		if (std::strstr(line.c_str(), lexCompare[i]))
@@ -76,11 +77,6 @@ bool		LexerParser::Lexer(std::string line)
 			break;
 		}
 	}
-	std::cout << "_inst: " << lexCompare[_inst] << std::endl;
-	std::cout << "_type: " << TypeCompare[_type] << std::endl;
-	std::cout << "_value: " << _value << std::endl;
-	std::cout << "found: " << line << std::endl;
-	return true;
 }
 
 /*
