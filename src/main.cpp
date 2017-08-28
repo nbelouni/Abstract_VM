@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:06:34 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/08/27 19:53:28 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/08/28 18:48:14 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,14 @@ int main()
 			std::cout << "value: " << test->toString() << ", type: " << TypeCompare[test->getType()] << std::endl;
 			std::cout << "value: " << test2->toString() << ", type: " << TypeCompare[test2->getType()] << std::endl;
 			IOperand const *test3 = *test + *test2;
-//			std::cout << (test + test2).toString() << std::endl;
+			std::cout << "value: " << test3->toString() << ", type: " << TypeCompare[test3->getType()] << std::endl;
+			test3 = *test - *test2;
+			std::cout << "value: " << test3->toString() << ", type: " << TypeCompare[test3->getType()] << std::endl;
+			test3 = *test * *test2;
+			std::cout << "value: " << test3->toString() << ", type: " << TypeCompare[test3->getType()] << std::endl;
+			test3 = *test / *test2;
+			std::cout << "value: " << test3->toString() << ", type: " << TypeCompare[test3->getType()] << std::endl;
+			test3 = *test % *test2;
 			std::cout << "value: " << test3->toString() << ", type: " << TypeCompare[test3->getType()] << std::endl;
 		}
 		catch(std::exception &e)

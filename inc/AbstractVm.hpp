@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:07:18 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/08/27 18:42:18 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/08/28 19:15:34 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 
 # define NONE	-1
 
-#include <iostream>
-#include <string>
-#include <regex>
 #include <exception>
-#include <vector>
 #include <functional>
+#include <iostream>
+#include <regex>
+#include <string>
+#include <sstream>
+#include <vector>
 
 enum	Lexem
 {
@@ -71,8 +72,8 @@ const char	*const TypeCompare[6] = {
 	"none"};
 
 #include "IOperand.hpp"
-#include "OperandFactory.hpp"
 #include "Operand.hpp"
+#include "OperandFactory.hpp"
 #include "LexerParser.hpp"
 
 #endif
