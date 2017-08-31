@@ -6,46 +6,47 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:06:34 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/08/28 18:48:14 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/08/31 19:31:33 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AbstractVm.hpp"
+#include <unistd.h>
 
-int main()
+int main(int argc, char **argv)
 {
-	std::string n = std::string("4");
 	LexerParser lexPars = LexerParser();
-	OperandFactory factory = OperandFactory();
-	for (std::string line; std::getline(std::cin, line);)
+	if (argc < 2)
 	{
-		std::cout << line << std::endl;
 		try
 		{
-			lexPars.Parser(lexPars.Lexer(line));
-
-			IOperand const *test = factory.createOperand(INT8, n);
-
-			n.assign("8");
-			IOperand const *test2 = factory.createOperand(INT8, n);
-	std::cout << "ok" << std::endl;
-			std::cout << "value: " << test->toString() << ", type: " << TypeCompare[test->getType()] << std::endl;
-			std::cout << "value: " << test2->toString() << ", type: " << TypeCompare[test2->getType()] << std::endl;
-			IOperand const *test3 = *test + *test2;
-			std::cout << "value: " << test3->toString() << ", type: " << TypeCompare[test3->getType()] << std::endl;
-			test3 = *test - *test2;
-			std::cout << "value: " << test3->toString() << ", type: " << TypeCompare[test3->getType()] << std::endl;
-			test3 = *test * *test2;
-			std::cout << "value: " << test3->toString() << ", type: " << TypeCompare[test3->getType()] << std::endl;
-			test3 = *test / *test2;
-			std::cout << "value: " << test3->toString() << ", type: " << TypeCompare[test3->getType()] << std::endl;
-			test3 = *test % *test2;
-			std::cout << "value: " << test3->toString() << ", type: " << TypeCompare[test3->getType()] << std::endl;
+			std::list<t_op> ops = lexPars.Parser(lexPars.Lexer(NULL));
+			VM vm = VM(ops);
+			vm.Run();
 		}
 		catch(std::exception &e)
 		{
-			std::cout << e.what() << line << std::endl;
-//			exit(1);
+			std::cout << e.what() << std::endl;
+		}
+	}
+	else
+	{
+		for (int i = 1; i < argc; i++)
+		{
+			try
+			{
+				std::string fileName(argv[i]);
+				std::list<t_op> ops = lexPars.Parser(lexPars.Lexer(&fileName));
+				VM vm = VM(ops);
+				vm.Run();
+				lexPars.clear();
+
+			}
+			catch(std::exception &e)
+			{
+				std::cout << e.what() << std::endl;
+			}
+	//		sleep(5);std::cout << "______1" << std::endl;
 		}
 	}
 	return 0;

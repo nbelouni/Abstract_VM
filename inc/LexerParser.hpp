@@ -6,45 +6,41 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:06:28 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/08/24 19:28:38 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/08/31 20:39:55 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef		LEXER_PARSER_HPP
 # define	LEXER_PARSER_HPP
 
-#include <iostream>
+
+# define VALID_LINE 	"( *(push +(int(8|16|32)\\(-?[0-9]+\\)|((float|double)\\(-?[0-9]+(\\.[0-9]+)?\\)))|pop|dump|assert +(int(8|16|32)\\(-?[0-9]+\\)|((float|double)\\(-?[0-9]+(\\.[0-9]+)?\\)))|add|sub|mul|div|mod|mod|print|exit|;;+) *)"
 
 class LexerParser
 {
 	private:
-		int			_inst;
-		int			_type;
-		std::string	_value;
+		std::list<struct s_op>		_ops;
 
 	public:
 		LexerParser();
 		LexerParser(LexerParser const &);
 		~LexerParser();
 
-		void		setInst(int inst);
-		int			getInst(void) const;
+		std::list<t_op> const		&getOps(void) const;
 
-		void		setType(int inst);
-		int			getType(void) const;
-
-		void		setValue(std::string inst);
-		std::string	getValue(void) const;
-
-		std::string	Lexer(std::string line);
-		void		Parser(std::string line);
+		void						clear(void);
+		std::vector<std::string>	Lexer(std::string *line);
+		std::list<t_op> const 		&Parser(std::vector<std::string> file);
 
 		LexerParser	&operator=(LexerParser const &lex);
 		
 		class	InvalidLineException : public std::exception
 		{
+			private:
+				std::string		_message;
+
 			public:
-				InvalidLineException();
+				InvalidLineException(std::string);
 				InvalidLineException(InvalidLineException const &);
 				virtual ~InvalidLineException() throw();
 				virtual const char *what() const throw();
@@ -53,7 +49,5 @@ class LexerParser
 			InvalidLineException &operator=(InvalidLineException const &);
 		};
 };
-
-# define VALID_LINE 	"( *(push +(int(8|16|32)\\([0-9]+\\)|((float|double)\\([0-9]+(\\.[0-9]+)?\\)))|pop|dump|assert +(int(8|16|32)\\([0-9]+\\)|((float|double)\\([0-9]+(\\.[0-9]+)?\\)))|add|sub|mul|div|mod|mod|print|exit|;;) *)"
 
 #endif

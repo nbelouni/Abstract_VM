@@ -6,15 +6,14 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:19:15 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/08/24 19:29:40 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/08/31 20:44:02 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AbstractVm.hpp"
 
-LexerParser::LexerParser(void) : _inst(0), _type(0), _value("")
+LexerParser::LexerParser(void)
 {
-	std::cout << "LexerParser constructed." << std::endl;
 }
 
 LexerParser::LexerParser(LexerParser const &lp)
@@ -24,100 +23,110 @@ LexerParser::LexerParser(LexerParser const &lp)
 
 LexerParser::~LexerParser(void)
 {
-	std::cout << "LexerParser destroyed." << std::endl;
+	_ops.clear();
 }
 
 LexerParser		&LexerParser::operator=(LexerParser const &rhs)
 {
-	this->_inst = rhs.getInst();
-	this->_type = rhs.getType();
-	this->_value = rhs.getValue();
-	std::cout << "LexerParser content copied." << std::endl;
+	_ops = rhs.getOps();
 	return *this;
 }
 
-std::string		LexerParser::Lexer(std::string line)
+void						LexerParser::clear(void)
 {
-	std::regex pieces_regex(VALID_LINE);
-	std::cmatch pieces_match;
-
-	_inst = NONE;
-	_type = NONE;
-	_value.clear();
-
-	line = std::regex_replace(line, std::regex("([ ]+)"), " ");
-	if (std::regex_search(line.c_str(), pieces_match, std::regex("(;[^;])")))
-		line = pieces_match.prefix();
-	if (line.length() == 0 || !std::regex_match(line.c_str(), pieces_match, pieces_regex))
-		throw InvalidLineException();
-	return line;
+	_ops.clear();
 }
 
-void		LexerParser::Parser(std::string line)
+std::vector<std::string>	LexerParser::Lexer(std::string *fileName)
 {
-	for (int i = 0; i < 11; i++)
+	std::regex	pieces_regex(VALID_LINE);
+	std::cmatch	pieces_match;
+	std::string	line;
+	std::vector<std::string>	epurFile;
+
+	if (fileName)
 	{
-		if (std::strstr(line.c_str(), lexCompare[i]))
+		std::ifstream file(*fileName);
+		if (file.is_open())
 		{
-			_inst = i;
-			if (i == PUSH || i == ASSERT)
+			while (std::getline(file, line))
 			{
-				for (int j = 0; j < 5; j++)
-				{
-					if (std::strstr(line.c_str(), TypeCompare[j]))
-					{
-						_type = j;
-						std::size_t begin = line.find("(") + 1;
-						std::size_t end = line.find(")");
-						_value = line.substr(begin, end - begin);
-						break;
-					}
-				}
+				line = std::regex_replace(line, std::regex("([ ]+)"), " ");
+				if (std::regex_search(line.c_str(), pieces_match, std::regex("(;[^;])")))
+					line = pieces_match.prefix();
+				if (line.length() != 0 && !std::regex_match(line.c_str(), pieces_match, pieces_regex))
+					throw InvalidLineException(std::string("Syntax error: ").append(line));
+				epurFile.push_back(line);
 			}
-			break;
 		}
 	}
+	else
+	{
+		while (std::getline(std::cin, line))
+		{
+			line = std::regex_replace(line, std::regex("([ ]+)"), " ");
+			if (std::regex_search(line.c_str(), pieces_match, std::regex("(;[^;])")))
+				line = pieces_match.prefix();
+			if (line.length() != 0 && !std::regex_match(line.c_str(), pieces_match, pieces_regex))
+				throw InvalidLineException(std::string("Syntax error: ").append(line));
+			epurFile.push_back(line);
+			if (std::strstr(line.c_str(), lexCompare[EXIT2]))
+				break;
+		}
+	}
+	return (epurFile);
+}
+
+std::list<t_op> const	&LexerParser::Parser(std::vector<std::string> file)
+{
+	t_op tmp;
+
+	for (std::vector<std::string>::iterator iFile = file.begin(); iFile != file.end(); iFile++)
+	{
+		tmp._inst = 0;
+		tmp._type = -1;
+		tmp._value.clear();
+		for (int i = 0; i < 12; i++)
+		{
+			if ((*iFile).length() > 0 && std::strstr((*iFile).c_str(), lexCompare[i]))
+			{
+				tmp._inst = i;
+				if (i == PUSH || i == ASSERT)
+				{
+					for (int j = 0; j < 5; j++)
+					{
+						if (std::strstr((*iFile).c_str(), TypeCompare[j]))
+						{
+							tmp._type = j;
+							std::size_t begin = (*iFile).find("(") + 1;
+							std::size_t end = (*iFile).find(")");
+							tmp._value = (*iFile).substr(begin, end - begin);
+							break;
+						}
+					}
+				}
+				_ops.push_back(tmp);
+				break;
+			}
+		}
+	}
+	return getOps();
 }
 
 /*
  *	Get/Set
  */
 
-void		LexerParser::setInst(int inst) 
+std::list<t_op>	const &LexerParser::getOps(void) const
 {
-	_inst = inst;
-}
-
-int			LexerParser::getInst(void) const
-{
-	return this->_inst;
-}
-
-void		LexerParser::setType(int type) 
-{
-	this->_type = type;
-}
-
-int			LexerParser::getType(void) const
-{
-	return this->_type;
-}
-
-void		LexerParser::setValue(std::string value)
-{
-	this->_value = value;
-}
-
-std::string	LexerParser::getValue(void) const
-{
-	return this->_value;
+	return _ops;
 }
 
 /*
  *	Nested Classes
  */
 
-LexerParser::InvalidLineException::InvalidLineException()
+LexerParser::InvalidLineException::InvalidLineException(std::string s) : _message(s)
 {
 }
 
@@ -138,5 +147,5 @@ LexerParser::InvalidLineException &LexerParser::InvalidLineException::operator=(
 
 char const	*LexerParser::InvalidLineException::what() const throw()
 {
-	return ("Syntax error: ");
+	return (_message.c_str());
 }

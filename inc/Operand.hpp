@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 15:18:20 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/08/28 19:15:56 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/08/31 20:02:32 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,10 @@ template <typename T> class Operand : public IOperand
 
 		~Operand()
 		{
+			_value.clear();
+			_err_max.clear();
+			_err_min.clear();
+			delete _factory;
 		}
 
 /*
@@ -66,7 +70,7 @@ template <typename T> class Operand : public IOperand
 
 				virtual const char *what() const throw()
 				{
-					return ("Cannot divide by zero.");
+					return ("Division by zero.");
 				}
 		
 			private:
@@ -91,7 +95,7 @@ template <typename T> class Operand : public IOperand
 
 				virtual const char *what() const throw()
 				{
-					return ("Cannot mod by zero.");
+					return ("Modulo by zero.");
 				}
 		
 			private:
@@ -102,9 +106,13 @@ template <typename T> class Operand : public IOperand
 **		IOperand Functions
 */
 
-/*
-		int 			getPrecision(void) const; // Precision of the type of the instance
-*/
+
+		int 			getPrecision(void) const // Precision of the type of the instance
+		{
+			return static_cast<int>(_type);
+		}
+
+
 		eOperandType	getType(void) const // Type of the instance
 		{
 			return _type;
@@ -112,111 +120,71 @@ template <typename T> class Operand : public IOperand
 
 		IOperand const	*operator+(IOperand const &rhs) const // Sum
 		{
-			try
-			{
-				if (std::stold(_value) > static_cast<long double>(std::numeric_limits<T>::max()))
-					throw std::range_error(_err_max.c_str());
-				else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
-					throw std::range_error(_err_min.c_str());
-				long double n = std::stold(_value) + std::stold(rhs.toString());
-				std::stringstream blah;
-				blah << n;
+			if (std::stold(_value) > static_cast<long double>(std::numeric_limits<T>::max()))
+				throw std::range_error(_err_max.c_str());
+			else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
+				throw std::range_error(_err_min.c_str());
+			long double n = std::stold(_value) + std::stold(rhs.toString());
+			std::stringstream blah;
+			blah << n;
 
-				return _factory->createOperand((_type > rhs.getType()) ? _type : rhs.getType(), blah.str());
-			}
-			catch(std::range_error &e)
-			{
-				std::cout << e.what() << std::endl;
-			}
-			return NULL;
+			return _factory->createOperand((_type > rhs.getType()) ? _type : rhs.getType(), blah.str());
 		}
 
 		IOperand const	*operator-(IOperand const &rhs) const // Difference
 		{
-			try
-			{
-				if (std::stold(_value) > static_cast<long double>(std::numeric_limits<T>::max()))
-					throw std::range_error(_err_max.c_str());
-				else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
-					throw std::range_error(_err_min.c_str());
-				long double n = std::stold(_value) - std::stold(rhs.toString());
-				std::stringstream blah;
-				blah << n;
+			if (std::stold(_value) > static_cast<long double>(std::numeric_limits<T>::max()))
+				throw std::range_error(_err_max.c_str());
+			else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
+				throw std::range_error(_err_min.c_str());
+			long double n = std::stold(_value) - std::stold(rhs.toString());
+			std::stringstream blah;
+			blah << n;
 
-				return _factory->createOperand((_type > rhs.getType()) ? _type : rhs.getType(), blah.str());
-			}
-			catch(std::range_error &e)
-			{
-				std::cout << e.what() << std::endl;
-			}
-			return NULL;
+			return _factory->createOperand((_type > rhs.getType()) ? _type : rhs.getType(), blah.str());
 		}
 
 		IOperand const	*operator*(IOperand const &rhs) const // Product
 		{
-			try
-			{
-				if (std::stold(_value) > static_cast<long double>(std::numeric_limits<T>::max()))
-					throw std::range_error(_err_max.c_str());
-				else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
-					throw std::range_error(_err_min.c_str());
-				long double n = std::stold(_value) * std::stold(rhs.toString());
-				std::stringstream blah;
-				blah << n;
+			if (std::stold(_value) > static_cast<long double>(std::numeric_limits<T>::max()))
+				throw std::range_error(_err_max.c_str());
+			else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
+				throw std::range_error(_err_min.c_str());
+			long double n = std::stold(_value) * std::stold(rhs.toString());
+			std::stringstream blah;
+			blah << n;
 
-				return _factory->createOperand((_type > rhs.getType()) ? _type : rhs.getType(), blah.str());
-			}
-			catch(std::range_error &e)
-			{
-				std::cout << e.what() << std::endl;
-			}
-			return NULL;
+			return _factory->createOperand((_type > rhs.getType()) ? _type : rhs.getType(), blah.str());
 		}
 
 		IOperand const	*operator/(IOperand const &rhs) const // Quotient
 		{
-			try
-			{
-				if (std::stold(_value) > static_cast<long double>(std::numeric_limits<T>::max()))
-					throw std::range_error(_err_max.c_str());
-				else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
-					throw std::range_error(_err_min.c_str());
-				else if (std::stold(rhs.toString()) == 0.0)
-					throw DivideByZeroException();
-				long double n = std::stold(_value) / std::stold(rhs.toString());
-				std::stringstream blah;
-				blah << n;
+			if (std::stold(_value) > static_cast<long double>(std::numeric_limits<T>::max()))
+				throw std::range_error(_err_max.c_str());
+			else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
+				throw std::range_error(_err_min.c_str());
+			else if (std::stold(rhs.toString()) == 0.0)
+				throw DivideByZeroException();
+			long double n = std::stold(_value) / std::stold(rhs.toString());
+			std::stringstream blah;
+			blah << n;
 
-				return _factory->createOperand((_type > rhs.getType()) ? _type : rhs.getType(), blah.str());
-			}
-			catch(std::range_error &e)
-			{
-				std::cout << e.what() << std::endl;
-			}
-			return NULL;
+			return _factory->createOperand((_type > rhs.getType()) ? _type : rhs.getType(), blah.str());
 		}
 
 		IOperand const	*operator%(IOperand const &rhs) const // Modulo
 		{
-			try
-			{
-				if (std::stold(_value) > static_cast<long double>(std::numeric_limits<T>::max()))
-					throw std::range_error(_err_max.c_str());
-				else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
-					throw std::range_error(_err_min.c_str());
-				else if (std::stold(rhs.toString()) == 0.0)
-					throw ModByZeroException();
-				long double n = std::stoll(_value) % std::stoll(rhs.toString());
-				std::stringstream blah;
-				blah << n;
+			if (std::stold(_value) > static_cast<long double>(std::numeric_limits<T>::max()))
+				throw std::range_error(_err_max.c_str());
+			else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
+				throw std::range_error(_err_min.c_str());
+			else if (std::stold(rhs.toString()) == 0.0)
+				throw ModByZeroException();
+			long double n = std::stoll(_value) % std::stoll(rhs.toString());
+			std::stringstream blah;
+			blah << n;
 
-				return _factory->createOperand((_type > rhs.getType()) ? _type : rhs.getType(), blah.str());
-			}
-			catch(std::range_error &e)
-			{
-				std::cout << e.what() << std::endl;
-			}
-			return NULL;
+			return _factory->createOperand((_type > rhs.getType()) ? _type : rhs.getType(), blah.str());
 		}
 
 

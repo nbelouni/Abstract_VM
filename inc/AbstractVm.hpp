@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:07:18 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/08/28 19:15:34 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/08/31 14:08:19 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,25 @@
 
 # define NONE	-1
 
+#include <dirent.h>
 #include <exception>
+#include <fstream>
 #include <functional>
 #include <iostream>
 #include <regex>
 #include <string>
 #include <sstream>
 #include <vector>
+#include <list>
 
-enum	Lexem
+typedef struct	s_op
+{
+	int			_inst;
+	int			_type;
+	std::string	_value;
+}				t_op;
+
+enum	eLexem
 {
 	PUSH, // n
 	POP,
@@ -35,7 +45,8 @@ enum	Lexem
 	DIV,
 	MOD,
 	PRINT,
-	EXIT
+	EXIT1,
+	EXIT2
 };
 
 enum	eOperandType
@@ -50,7 +61,7 @@ enum	eOperandType
 /*
 **	ADD Factory functions
 */
-const char	*const lexCompare[11] = {
+const char	*const lexCompare[12] = {
 	"push",
 	"pop",
 	"dump",
@@ -61,7 +72,8 @@ const char	*const lexCompare[11] = {
 	"div",
 	"mod",
 	"print",
-	"exit"};
+	"exit",
+	";;"};
 
 const char	*const TypeCompare[6] = {
 	"int8",
@@ -75,5 +87,6 @@ const char	*const TypeCompare[6] = {
 #include "Operand.hpp"
 #include "OperandFactory.hpp"
 #include "LexerParser.hpp"
+#include "VM.hpp"
 
 #endif
