@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:06:34 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/08/31 19:31:33 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/09/06 21:04:47 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,13 @@ int main(int argc, char **argv)
 				std::list<t_op> ops = lexPars.Parser(lexPars.Lexer(&fileName));
 				VM vm = VM(ops);
 				vm.Run();
-				lexPars.clear();
 
 			}
 			catch(std::exception &e)
 			{
 				std::cout << e.what() << std::endl;
 			}
-	//		sleep(5);std::cout << "______1" << std::endl;
+			lexPars.clear();
 		}
 	}
 	return 0;

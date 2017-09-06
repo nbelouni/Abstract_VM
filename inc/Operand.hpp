@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 15:18:20 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/08/31 20:02:32 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/09/06 20:54:45 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@
 #include "AbstractVm.hpp"
 
 #include "OperandFactory.hpp"
+#include <iomanip>
 
 template <typename T> class Operand : public IOperand
 {
 	private:
 		std::string		_value;
 		eOperandType	_type;
+		int				_precision;
 		OperandFactory	*_factory;
 		std::string		_err_max;
 		std::string		_err_min;
@@ -32,6 +34,16 @@ template <typename T> class Operand : public IOperand
 		Operand(std::string const &n, eOperandType type) : _value(n), _type(type) 
 		{
 			_factory = new OperandFactory();
+			if (_type <= INT32)
+				_precision = 0;
+			else
+			{
+				size_t i = n.find(".");
+				if (i == n.npos)
+					_precision = 0;
+				else
+					_precision = std::strlen(&(n.at(i + 1)));
+			}
 			_err_max.assign("Value larger than maximum value : ").append(TypeCompare[_type]).c_str();
 			_err_min.assign("Value smaller than minimum value : ").append(TypeCompare[_type]).c_str();
 		}
@@ -109,7 +121,7 @@ template <typename T> class Operand : public IOperand
 
 		int 			getPrecision(void) const // Precision of the type of the instance
 		{
-			return static_cast<int>(_type);
+			return _precision;
 		}
 
 
@@ -126,8 +138,9 @@ template <typename T> class Operand : public IOperand
 				throw std::range_error(_err_min.c_str());
 			long double n = std::stold(_value) + std::stold(rhs.toString());
 			std::stringstream blah;
+			blah << std::fixed;
+			blah << std::setprecision((_precision > rhs.getPrecision()) ? _precision : rhs.getPrecision());
 			blah << n;
-
 			return _factory->createOperand((_type > rhs.getType()) ? _type : rhs.getType(), blah.str());
 		}
 
@@ -139,6 +152,8 @@ template <typename T> class Operand : public IOperand
 				throw std::range_error(_err_min.c_str());
 			long double n = std::stold(_value) - std::stold(rhs.toString());
 			std::stringstream blah;
+			blah << std::fixed;
+			blah << std::setprecision((_precision > rhs.getPrecision()) ? _precision : rhs.getPrecision());
 			blah << n;
 
 			return _factory->createOperand((_type > rhs.getType()) ? _type : rhs.getType(), blah.str());
@@ -152,6 +167,8 @@ template <typename T> class Operand : public IOperand
 				throw std::range_error(_err_min.c_str());
 			long double n = std::stold(_value) * std::stold(rhs.toString());
 			std::stringstream blah;
+			blah << std::fixed;
+			blah << std::setprecision((_precision > rhs.getPrecision()) ? _precision : rhs.getPrecision());
 			blah << n;
 
 			return _factory->createOperand((_type > rhs.getType()) ? _type : rhs.getType(), blah.str());
@@ -167,6 +184,8 @@ template <typename T> class Operand : public IOperand
 				throw DivideByZeroException();
 			long double n = std::stold(_value) / std::stold(rhs.toString());
 			std::stringstream blah;
+			blah << std::fixed;
+			blah << std::setprecision((_precision > rhs.getPrecision()) ? _precision : rhs.getPrecision());
 			blah << n;
 
 			return _factory->createOperand((_type > rhs.getType()) ? _type : rhs.getType(), blah.str());
@@ -178,9 +197,9 @@ template <typename T> class Operand : public IOperand
 				throw std::range_error(_err_max.c_str());
 			else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
 				throw std::range_error(_err_min.c_str());
-			else if (std::stold(rhs.toString()) == 0.0)
+			else if (std::stold(rhs.toString()) == 0)
 				throw ModByZeroException();
-			long double n = std::stoll(_value) % std::stoll(rhs.toString());
+			long double n = fmod(std::stold(_value), std::stold(rhs.toString()));
 			std::stringstream blah;
 			blah << n;
 

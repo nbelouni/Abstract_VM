@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:07:18 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/08/31 14:08:19 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/09/06 20:27:13 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # define NONE	-1
 
+#include <cmath>
 #include <dirent.h>
 #include <exception>
 #include <fstream>
@@ -25,6 +26,7 @@
 #include <sstream>
 #include <vector>
 #include <list>
+#include <iomanip>
 
 typedef struct	s_op
 {

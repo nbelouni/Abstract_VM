@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/28 19:26:41 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/08/31 20:07:13 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/09/06 20:55:41 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void		VM::dump(void)
 		std::vector<IOperand const *>::iterator tmp = _stack.end() - 1;
 		while (1)
 		{
-			std::cout << (*tmp)->toString() << std::endl;
+			std::cout << std::setprecision((*tmp)->getPrecision()) << "type : " << TypeCompare[(*tmp)->getType()] << ", value : " << (*tmp)->toString() << std::endl;
 			if (*tmp == *(_stack.begin()))
 				break;
 			tmp -= 1;
@@ -102,8 +102,17 @@ void		VM::assert(void)
 {
 	if (_stack.size() == 0)
 		throw VM::BadInstructionException("Cannot assert: empty stack.");
+
+	std::string toCompare(((*(_stack.end() -1))->toString()));
+	int i = 0;
+	for (i = toCompare.length() -1 ; i >= 0 && toCompare[i] == '0'; i--)
+		;
+	if (i > 0 && i < static_cast<int>(toCompare.length()) - 1)
+	{
+		toCompare = toCompare.substr(0, i + 1);
+	}
 	if (_instructions.front()._type != (*(_stack.end() -1 ))->getType()
-	||	_instructions.front()._value.compare((*(_stack.end() -1))->toString()))
+	||	_instructions.front()._value.compare(toCompare))
 		throw VM::BadInstructionException("Assert failed");
 }
 
@@ -193,7 +202,6 @@ void		VM::Run(void)
 {
 	while (_instructions.size() > 0)
 	{
-		std::cout << lexCompare[_instructions.front()._inst] << std::endl;
 		if (!_instructions.empty())
 		{
 			if (_instructions.front()._inst >= EXIT1)
