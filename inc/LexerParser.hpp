@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:06:28 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/08/31 20:39:55 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/09/20 19:52:00 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define	LEXER_PARSER_HPP
 
 
-# define VALID_LINE 	"( *(push +(int(8|16|32)\\(-?[0-9]+\\)|((float|double)\\(-?[0-9]+(\\.[0-9]+)?\\)))|pop|dump|assert +(int(8|16|32)\\(-?[0-9]+\\)|((float|double)\\(-?[0-9]+(\\.[0-9]+)?\\)))|add|sub|mul|div|mod|mod|print|exit|;;+) *)"
+# define VALID_LINE 	"( *(push +(int(8|16|32)\\(-?[0-9]+\\)|((float|double)\\(-?[0-9]+(\\.[0-9]+)?\\)))|pop|dump|assert +(int(8|16|32)\\(-?[0-9]+\\)|((float|double)\\(-?[0-9]+(\\.[0-9]+)?\\)))|add|sub|mul|div|mod|mod|print|exit|;.*) *)"
 
 class LexerParser
 {
