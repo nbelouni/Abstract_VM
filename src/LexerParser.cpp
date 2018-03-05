@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:19:15 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/09/20 19:53:20 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/12/09 15:20:20 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ std::vector<std::string>	LexerParser::Lexer(std::string *fileName)
 			while (std::getline(file, line))
 			{
 				line = std::regex_replace(line, std::regex("([ ]+)"), " ");
-				if (std::regex_search(line.c_str(), pieces_match, std::regex("(;[^;])")))
+				if (std::regex_search(line.c_str(), pieces_match, std::regex("(;[^;]?)")))
 					line = pieces_match.prefix();
 				if (line.length() != 0 && !std::regex_match(line.c_str(), pieces_match, pieces_regex))
 					throw InvalidLineException(std::string("Syntax error: ").append(line));

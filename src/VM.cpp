@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/28 19:26:41 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/09/06 20:55:41 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/12/09 17:54:36 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,12 +105,15 @@ void		VM::assert(void)
 
 	std::string toCompare(((*(_stack.end() -1))->toString()));
 	int i = 0;
-	for (i = toCompare.length() -1 ; i >= 0 && toCompare[i] == '0'; i--)
-		;
-	if (i > 0 && i < static_cast<int>(toCompare.length()) - 1)
+	for (i = toCompare.length() -1 ; i >= 0; i--)
 	{
-		toCompare = toCompare.substr(0, i + 1);
+		if (toCompare[i] != '0' && toCompare[i] != '.' && toCompare[i] == '-')
+			break;
 	}
+	if (i >= 0 && i < static_cast<int>(toCompare.length()))
+		toCompare = toCompare.substr(0, i + 1);
+	else
+		toCompare = "0";
 	if (_instructions.front()._type != (*(_stack.end() -1 ))->getType()
 	||	_instructions.front()._value.compare(toCompare))
 		throw VM::BadInstructionException("Assert failed");
@@ -162,7 +165,7 @@ void		VM::div(void)
 
 	IOperand const *tmp;
 
-	tmp = (*(*(_stack.end() - 1)) / *(*(_stack.end() - 2)));
+	tmp = (*(*(_stack.end() - 2)) / *(*(_stack.end() - 1)));
 	pop();
 	pop();
 	_stack.push_back(tmp);
@@ -177,7 +180,7 @@ void		VM::mod(void)
 
 	if (_stack.size() >= 2)
 	{
-		tmp = (*(*(_stack.end() - 1)) % *(*(_stack.end() - 2)));
+		tmp = (*(*(_stack.end() - 2)) % *(*(_stack.end() - 1)));
 		pop();
 		pop();
 		_stack.push_back(tmp);

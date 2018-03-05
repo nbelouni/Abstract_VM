@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/26 13:55:45 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/09/06 20:15:44 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/12/09 16:13:48 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ IOperand const	*OperandFactory::createDouble(std::string const &value) const
 {
 	if (std::stold(value) > static_cast<long double>(std::numeric_limits<double>::max()))
 		throw std::range_error("Value larger than maximum value : double.");
-	else if (std::stold(value) < -1 * static_cast<long double>(std::numeric_limits<double>::max()))
+	else if (std::stold(value) < -1 * (static_cast<long double>(std::numeric_limits<double>::max()) - 1))
 		throw std::range_error("Value smaller than minimum value value : double.");
 	return new Operand<double>(value, DOUBLE);
 }

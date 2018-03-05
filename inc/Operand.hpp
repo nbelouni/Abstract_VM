@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 15:18:20 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/09/06 20:54:45 by nbelouni         ###   ########.fr       */
+/*   Updated: 2017/12/09 18:43:36 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,11 +132,16 @@ template <typename T> class Operand : public IOperand
 
 		IOperand const	*operator+(IOperand const &rhs) const // Sum
 		{
-			if (std::stold(_value) > static_cast<long double>(std::numeric_limits<T>::max()))
+			if (std::stold(_value) + std::stold(rhs.toString()) > static_cast<long double>(std::numeric_limits<T>::max()))
 				throw std::range_error(_err_max.c_str());
-			else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
+			else if (std::stold(_value) + std::stold(rhs.toString()) < static_cast<long double>((std::numeric_limits<T>::max() - 1) * -1))
 				throw std::range_error(_err_min.c_str());
 			long double n = std::stold(_value) + std::stold(rhs.toString());
+
+			printf("%s, %Lf\n", _value.c_str(), std::stold(_value));
+			printf("%s, %Lf\n", rhs.toString().c_str(), std::stold(rhs.toString()));
+			printf("%Lf\n", n);
+
 			std::stringstream blah;
 			blah << std::fixed;
 			blah << std::setprecision((_precision > rhs.getPrecision()) ? _precision : rhs.getPrecision());
@@ -146,9 +151,9 @@ template <typename T> class Operand : public IOperand
 
 		IOperand const	*operator-(IOperand const &rhs) const // Difference
 		{
-			if (std::stold(_value) > static_cast<long double>(std::numeric_limits<T>::max()))
+			if (std::stold(_value) - std::stold(rhs.toString()) > static_cast<long double>(std::numeric_limits<T>::max()))
 				throw std::range_error(_err_max.c_str());
-			else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
+			else if (std::stold(_value) - std::stold(rhs.toString()) < static_cast<long double>((std::numeric_limits<T>::max() - 1) * -1))
 				throw std::range_error(_err_min.c_str());
 			long double n = std::stold(_value) - std::stold(rhs.toString());
 			std::stringstream blah;
@@ -161,9 +166,9 @@ template <typename T> class Operand : public IOperand
 
 		IOperand const	*operator*(IOperand const &rhs) const // Product
 		{
-			if (std::stold(_value) > static_cast<long double>(std::numeric_limits<T>::max()))
+			if (std::stold(_value) * std::stold(rhs.toString()) > static_cast<long double>(std::numeric_limits<T>::max()))
 				throw std::range_error(_err_max.c_str());
-			else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
+			else if (std::stold(_value) * std::stold(rhs.toString()) < static_cast<long double>((std::numeric_limits<T>::max() - 1) * -1))
 				throw std::range_error(_err_min.c_str());
 			long double n = std::stold(_value) * std::stold(rhs.toString());
 			std::stringstream blah;
@@ -176,12 +181,14 @@ template <typename T> class Operand : public IOperand
 
 		IOperand const	*operator/(IOperand const &rhs) const // Quotient
 		{
-			if (std::stold(_value) > static_cast<long double>(std::numeric_limits<T>::max()))
-				throw std::range_error(_err_max.c_str());
-			else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
-				throw std::range_error(_err_min.c_str());
-			else if (std::stold(rhs.toString()) == 0.0)
+			std::regex zero_regex("^-?0\\.?0*$");
+
+			if (regex_search(rhs.toString(), zero_regex))
 				throw DivideByZeroException();
+			else if (std::stold(_value) / std::stold(rhs.toString()) > static_cast<long double>(std::numeric_limits<T>::max()))
+				throw std::range_error(_err_max.c_str());
+			else if (std::stold(_value) / std::stold(rhs.toString()) < static_cast<long double>((std::numeric_limits<T>::max() - 1) * -1))
+				throw std::range_error(_err_min.c_str());
 			long double n = std::stold(_value) / std::stold(rhs.toString());
 			std::stringstream blah;
 			blah << std::fixed;
@@ -193,16 +200,20 @@ template <typename T> class Operand : public IOperand
 
 		IOperand const	*operator%(IOperand const &rhs) const // Modulo
 		{
-			if (std::stold(_value) > static_cast<long double>(std::numeric_limits<T>::max()))
-				throw std::range_error(_err_max.c_str());
-			else if (std::stold(_value) < static_cast<long double>(std::numeric_limits<T>::min()))
-				throw std::range_error(_err_min.c_str());
-			else if (std::stold(rhs.toString()) == 0)
+			std::regex zero_regex("^-?0\\.?0*$");
+
+			if (regex_search(rhs.toString(), zero_regex))
 				throw ModByZeroException();
-			long double n = fmod(std::stold(_value), std::stold(rhs.toString()));
+			else if (std::fmod(std::stold(_value), std::stold(rhs.toString())) > static_cast<long double>(std::numeric_limits<T>::max()))
+				throw std::range_error(_err_max.c_str());
+			else if (std::fmod(std::stold(_value), std::stold(rhs.toString())) < static_cast<long double>((std::numeric_limits<T>::max() - 1) * -1))
+				throw std::range_error(_err_min.c_str());
+			long double n = std::fmod(std::stold(_value), std::stold(rhs.toString()));
 			std::stringstream blah;
 			blah << n;
 
+			if (_type >= FLOAT)
+				std::cout << "\"The expression x - trunc(x/y)*y may not equal fmod(x,y) when the rounding of x/y to initialize the argument of trunc loses too much precision (example: x = 30.508474576271183309, y = 6.1016949152542370172)\"\n     (http://en.cppreference.com/w/cpp/numeric/math/fmod)"<< std::endl;
 			return _factory->createOperand((_type > rhs.getType()) ? _type : rhs.getType(), blah.str());
 		}
 
