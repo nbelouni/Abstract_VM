@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/28 19:26:41 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/12/09 17:54:36 by nbelouni         ###   ########.fr       */
+/*   Updated: 2018/03/09 16:22:28 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,20 +102,8 @@ void		VM::assert(void)
 {
 	if (_stack.size() == 0)
 		throw VM::BadInstructionException("Cannot assert: empty stack.");
-
-	std::string toCompare(((*(_stack.end() -1))->toString()));
-	int i = 0;
-	for (i = toCompare.length() -1 ; i >= 0; i--)
-	{
-		if (toCompare[i] != '0' && toCompare[i] != '.' && toCompare[i] == '-')
-			break;
-	}
-	if (i >= 0 && i < static_cast<int>(toCompare.length()))
-		toCompare = toCompare.substr(0, i + 1);
-	else
-		toCompare = "0";
-	if (_instructions.front()._type != (*(_stack.end() -1 ))->getType()
-	||	_instructions.front()._value.compare(toCompare))
+	if (_instructions.front()._type != (*(_stack.end() - 1 ))->getType()
+	||	std::stod(_instructions.front()._value) != std::stod((*(_stack.end() -1))->toString()))
 		throw VM::BadInstructionException("Assert failed");
 }
 
