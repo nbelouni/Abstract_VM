@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:06:34 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/12/09 18:57:21 by nbelouni         ###   ########.fr       */
+/*   Updated: 2018/03/09 17:08:25 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int main(int argc, char **argv)
 	{
 		for (int i = 1; i < argc; i++)
 		{
-			std::cout << "\n\nFILE : " << argv[i] << "\n" << std::endl;
 			try
 			{
 				std::string fileName(argv[i]);

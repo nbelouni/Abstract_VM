@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 15:18:20 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/12/09 18:43:36 by nbelouni         ###   ########.fr       */
+/*   Updated: 2018/03/09 16:38:30 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,10 +137,6 @@ template <typename T> class Operand : public IOperand
 			else if (std::stold(_value) + std::stold(rhs.toString()) < static_cast<long double>((std::numeric_limits<T>::max() - 1) * -1))
 				throw std::range_error(_err_min.c_str());
 			long double n = std::stold(_value) + std::stold(rhs.toString());
-
-			printf("%s, %Lf\n", _value.c_str(), std::stold(_value));
-			printf("%s, %Lf\n", rhs.toString().c_str(), std::stold(rhs.toString()));
-			printf("%Lf\n", n);
 
 			std::stringstream blah;
 			blah << std::fixed;

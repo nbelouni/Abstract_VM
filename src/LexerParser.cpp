@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:19:15 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/12/09 15:20:20 by nbelouni         ###   ########.fr       */
+/*   Updated: 2018/03/09 17:08:15 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ std::vector<std::string>	LexerParser::Lexer(std::string *fileName)
 		std::ifstream file(*fileName);
 		if (file.is_open())
 		{
+			std::cout << "\n\nFILE : " << *fileName	<< "\n" << std::endl;
 			while (std::getline(file, line))
 			{
 				line = std::regex_replace(line, std::regex("([ ]+)"), " ");
@@ -59,6 +60,8 @@ std::vector<std::string>	LexerParser::Lexer(std::string *fileName)
 				epurFile.push_back(line);
 			}
 		}
+		else
+			throw InvalidLineException(std::string((*fileName).append(": No such file.")));
 	}
 	else
 	{

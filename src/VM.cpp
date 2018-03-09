@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/28 19:26:41 by nbelouni          #+#    #+#             */
-/*   Updated: 2018/03/09 16:22:28 by nbelouni         ###   ########.fr       */
+/*   Updated: 2018/03/09 16:39:19 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void		VM::dump(void)
 			tmp -= 1;
 		}
 	}
+	std::cout << std::endl;
 }
 
 void		VM::assert(void)
