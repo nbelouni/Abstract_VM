@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/28 19:26:41 by nbelouni          #+#    #+#             */
-/*   Updated: 2018/03/09 16:39:19 by nbelouni         ###   ########.fr       */
+/*   Updated: 2018/03/09 18:15:19 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void		VM::sub(void)
 
 	IOperand const *tmp;
 
-	tmp = (*(*(_stack.end() - 1)) - *(*(_stack.end() - 2)));
+	tmp = (*(*(_stack.end() - 2)) - *(*(_stack.end() - 1)));
 	pop();
 	pop();
 	_stack.push_back(tmp);
@@ -182,6 +182,8 @@ void		VM::print(void)
 		throw VM::BadInstructionException("Cannot print: empty stack.");
 	if ((*(_stack.end() - 1))->getType() != INT8)
 		throw VM::BadInstructionException("Cannot print: bad type.");
+	if (std::stoi((*(_stack.end() - 1))->toString()) < 0)
+		throw VM::BadInstructionException("Cannot print: no ASCII value.");
 	char const c[2] = {static_cast<char>(std::stoi((*(_stack.end() - 1))->toString())), 0};
 	std::cout << c << std::endl;
 }
