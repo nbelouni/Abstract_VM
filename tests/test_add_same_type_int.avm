@@ -1,0 +1,106 @@
+;add
+
+;push int32(123)
+;add
+
+;INT8
+push int8(12)
+push int8(12)
+add
+dump
+
+
+push int8(12)
+push int8(-12)
+add
+dump
+
+push int8(-12)
+push int8(12)
+add
+dump
+
+
+push int8(-12)
+push int8(-12)
+add
+dump
+
+;push int8(-120)
+;push int8(-120)
+;add
+;dump
+
+;push int8(120)
+;push int8(120)
+;add
+;dump
+
+;INT16
+push int16(12)
+push int16(12)
+add
+dump
+
+
+push int16(12)
+push int16(-12)
+add
+dump
+
+push int16(-12)
+push int16(12)
+add
+dump
+
+
+push int16(-12)
+push int16(-12)
+add
+dump
+
+;push int16(-32768)
+;push int16(-12000)
+;add
+;dump
+
+;push int16(32767)
+;push int16(12000)
+;add
+;dump
+
+;INT32
+push int32(12)
+push int32(12)
+add
+dump
+
+
+push int32(12)
+push int32(-12)
+add
+dump
+
+push int32(-12)
+push int32(12)
+add
+dump
+
+
+push int32(-12)
+push int32(-12)
+add
+dump
+
+;push int32(-2147483648)
+;push int32(-12000)
+;add
+;dump
+
+;push int32(2147483647)
+;push int32(12000)
+;add
+;dump
+
+
+exit

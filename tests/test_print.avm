@@ -1,0 +1,21 @@
+;print
+
+;push int16(45)
+;print
+
+;push int32(45)
+;print
+
+;push float(45)
+;print
+
+;push double(45)
+;print
+
+push int8(45)
+print
+push int8(0)
+print
+;push int8(-23)
+;print
+exit

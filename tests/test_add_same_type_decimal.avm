@@ -1,0 +1,126 @@
+;FLOAT
+push float(12)
+push float(12)
+add
+dump
+
+
+push float(12)
+push float(-12)
+add
+dump
+
+push float(-12)
+push float(12)
+add
+dump
+
+
+push float(-12)
+push float(-12)
+add
+dump
+
+push float(12.045)
+push float(12.045)
+add
+dump
+
+
+push float(12.045)
+push float(-12.045)
+add
+dump
+
+push float(-12.045)
+push float(12.045)
+add
+dump
+
+
+push float(-12.045)
+push float(-12.045)
+add
+dump
+
+push float(300000000000000012135895401846682943488.00)
+push float(300000000000000012135895401846682943488.00)
+dump
+;add
+;dump
+
+push float(-300000000000000012135895401846682943487.00)
+push float(-300000000000000012135895401846682943487.00)
+dump
+;add
+;dump
+
+
+;DOUBLE
+push double(12)
+push double(12)
+add
+dump
+
+
+push double(12)
+push double(-12)
+add
+dump
+
+push double(-12)
+push double(12)
+add
+dump
+
+
+push double(-12)
+push double(-12)
+add
+dump
+
+push double(12.045)
+push double(12.045)
+add
+dump
+
+
+push double(12.045)
+push double(-12.045)
+add
+dump
+
+push double(-12.045)
+push double(12.045)
+add
+dump
+
+
+push double(-12.045)
+push double(-12.045)
+add
+dump
+
+push double(300000000000000012135895401846682943488.00)
+push double(300000000000000012135895401846682943488.00)
+dump
+add
+dump
+
+push double(-300000000000000012135895401846682943487.00)
+push double(-300000000000000012135895401846682943487.00)
+dump
+add
+dump
+
+push double(-0.00000000000000001)
+push double(-12.045)
+add
+dump
+
+push double(-0.0000001)
+push double(0)
+add
+dump
+
+exit

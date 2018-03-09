@@ -1,0 +1,39 @@
+; comment
+
+; INT8
+push int8(12)
+push int8(-12)
+push int8(0)
+
+;push int8(12.4)
+;push int8(-12.4)
+
+;push int8(120000)
+;push int8(-120000)
+
+; INT16
+push int16(120)
+push int16(-120)
+push int16(0)
+
+;push int16(12.4)
+;push int16(-12.4)
+
+;push int16(120000000000)
+;push int16(-120000000000)
+
+
+; INT32
+push int32(120)
+push int32(-120)
+push int32(0)
+
+;push int32(12.4)
+;push int32(-12.4)
+
+;push int32(120000000000)
+;push int32(-120000000000)
+
+dump
+
+exit

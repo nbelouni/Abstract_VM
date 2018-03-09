@@ -1,0 +1,8 @@
+dump
+
+push int32(333)
+
+dump 
+exit
+
+

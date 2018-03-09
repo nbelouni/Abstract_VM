@@ -1,0 +1,15 @@
+;pop
+
+push int32(496)
+pop
+
+dump
+
+push int32(496)
+push int32(497)
+push int32(498)
+pop
+
+dump
+
+exit

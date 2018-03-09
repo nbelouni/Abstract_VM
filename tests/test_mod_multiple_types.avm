@@ -1,0 +1,69 @@
+;INT8
+
+push int8(12)
+push int16(12)
+mod
+dump
+pop
+
+push int8(12)
+push int32(12)
+mod
+dump
+pop
+
+push int8(12)
+push float(12)
+mod
+dump
+pop
+
+push int8(12)
+push double(12)
+mod
+dump
+pop
+
+;INT16
+
+push int16(12)
+push int32(12)
+mod
+dump
+pop
+
+push int16(12)
+push float(12)
+mod
+dump
+pop
+
+push int16(12)
+push double(12)
+mod
+dump
+pop
+
+;INT32
+
+push int32(12)
+push float(12)
+mod
+dump
+pop
+
+push int32(12)
+push double(12)
+mod
+dump
+pop
+
+;FLOAT
+
+push float(12)
+push double(12)
+mod
+dump
+pop
+
+exit

@@ -1,0 +1,4 @@
+push int8(78)
+dump
+exit
+dump
