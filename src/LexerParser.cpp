@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:19:15 by nbelouni          #+#    #+#             */
-/*   Updated: 2018/03/09 17:08:15 by nbelouni         ###   ########.fr       */
+/*   Updated: 2018/03/22 19:29:58 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,21 @@ void						LexerParser::clear(void)
 	_ops.clear();
 }
 
+std::string					LexerParser::errorsToString(void)
+{
+	std::string		concat_errors;
+	for (size_t i = 0; i < _errors.size(); i++)
+	{
+		concat_errors.append(_errors[i]);
+	}
+	return concat_errors;
+}
+
+void						LexerParser::addError(std::string err)
+{
+	_errors.push_back(err);	
+}
+
 std::vector<std::string>	LexerParser::Lexer(std::string *fileName)
 {
 	std::regex	pieces_regex(VALID_LINE);
@@ -56,12 +71,12 @@ std::vector<std::string>	LexerParser::Lexer(std::string *fileName)
 				if (std::regex_search(line.c_str(), pieces_match, std::regex("(;[^;]?)")))
 					line = pieces_match.prefix();
 				if (line.length() != 0 && !std::regex_match(line.c_str(), pieces_match, pieces_regex))
-					throw InvalidLineException(std::string("Syntax error: ").append(line));
+					addError(std::string("Syntax error: ").append(line).append("\n"));
 				epurFile.push_back(line);
 			}
 		}
 		else
-			throw InvalidLineException(std::string((*fileName).append(": No such file.")));
+			addError(std::string((*fileName).append(": No such file.").append("\n")));
 	}
 	else
 	{
@@ -71,12 +86,14 @@ std::vector<std::string>	LexerParser::Lexer(std::string *fileName)
 			if (std::regex_search(line.c_str(), pieces_match, std::regex("(;[^;])")))
 				line = pieces_match.prefix();
 			if (line.length() != 0 && !std::regex_match(line.c_str(), pieces_match, pieces_regex))
-				throw InvalidLineException(std::string("Syntax error: ").append(line));
+				addError(std::string("Syntax error: ").append(line.append("\n")));
 			epurFile.push_back(line);
 			if (std::strstr(line.c_str(), lexCompare[EXIT2]))
 				break;
 		}
 	}
+	if (_errors.size() > 0)
+		throw InvalidLineException(errorsToString());
 	return (epurFile);
 }
 

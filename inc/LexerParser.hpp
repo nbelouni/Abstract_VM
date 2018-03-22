@@ -6,7 +6,7 @@
 /*   By: nbelouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:06:28 by nbelouni          #+#    #+#             */
-/*   Updated: 2017/08/31 20:39:55 by nbelouni         ###   ########.fr       */
+/*   Updated: 2018/03/22 19:23:04 by nbelouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ class LexerParser
 {
 	private:
 		std::list<struct s_op>		_ops;
+		std::vector<std::string>	_errors;
 
 	public:
 		LexerParser();
@@ -27,6 +28,9 @@ class LexerParser
 		~LexerParser();
 
 		std::list<t_op> const		&getOps(void) const;
+
+		std::string					errorsToString(void);
+		void						addError(std::string err);
 
 		void						clear(void);
 		std::vector<std::string>	Lexer(std::string *line);
